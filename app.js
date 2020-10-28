@@ -12,12 +12,16 @@ import { localsMiddleware } from "./middlewares";
 
 const app = express();
 
+app.use(helmet());
 app.set("view engine", "pug");
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(helmet());
 app.use(morgan("dev"));
+app.use((req, res, next) => {
+    res.setHeader("Content-Security-Policy", "default-src *;");
+    next();
+})
 
 app.use(localsMiddleware);
 

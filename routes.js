@@ -8,13 +8,25 @@ const routes = {
 
     // Users
     USERS: "/users",
-    USERS_DETAIL: "/:id",
+    USER_DETAIL: (id) => {
+        if (id) {
+            return `/users/${id}`;
+        } else {
+            return `/:id`;
+        }
+    },
     EDIT_PROFILE: "/edit-profile",
     CHANGE_PASSWORD: "/change-password",
 
     // Videos
     VIDEOS: "/videos",
-    VIDEO_DETAIL: "/:id",
+    VIDEO_DETAIL: (id) => {
+        if (id) {
+            return `/videos/${id}`;
+        } else {
+            return `/:id`;
+        }
+    },
     UPLOAD: "/upload",
     EDIT_VIDEO: "/:id/edit",
     DELETE_VIDEO: "/:id/delete",
