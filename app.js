@@ -14,12 +14,13 @@ const app = express();
 
 app.use(helmet());
 app.set("view engine", "pug");
+app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use((req, res, next) => {
-    res.setHeader("Content-Security-Policy", "default-src *;");
+    res.setHeader("Content-Security-Policy", "default-src self *;");
     next();
 })
 
