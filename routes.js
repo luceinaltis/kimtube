@@ -28,8 +28,20 @@ const routes = {
         }
     },
     UPLOAD: "/upload",
-    EDIT_VIDEO: "/:id/edit",
-    DELETE_VIDEO: "/:id/delete",
+    EDIT_VIDEO: (id) => {
+        if(id) {
+            return `/videos/${id}/edit`;
+        } else {
+            return `/:id/edit`;
+        }
+    },
+    DELETE_VIDEO: (id) => {
+        if(id) {
+            return `/${id}/delete`;
+        } else {
+            return "/:id/delete";
+        }
+    },
 } 
 
 export default routes;

@@ -3,8 +3,7 @@ import Video from "../models/video";
 
 export const home = async (req, res) => {
     try {
-        const videos = await Video.find({});
-        console.log(videos);
+        const videos = await Video.find({}).sort({ _id: -1 });
         res.render("home", { pageTitle: "Home", videos });
     } catch(err) {
         console.log(err);
@@ -29,16 +28,58 @@ export const postUpload = async (req, res) => {
         title,
         description
     })
-
-    console.log(newVideo);
-
     // To Do: Upload and save video
     res.redirect(routes.VIDEO_DETAIL(newVideo.id));
 };
 
-export const videoDetail = (req, res) => res.render("videoDetail", { pageTitle: "Video Detail" });
+export const videoDetail = async (req, res) => {
+    const { params: { id } } = req;
 
-export const editVideo = (req, res) => res.render("editVideo", { pageTitle: "Edit Video" });
+    try {
+        const video = await Video.findById(id);
+        res.render("videoDetail", { pageTitle: video.title, video });
+    } catch(error) {
+        console.log(error);
+        res.redirect(routes.HOME);
+    }
+};
 
-export const deleteVideo = (req, res) => res.render("deleteVideo", { pageTitle: "Delete Video" });
+export const getEditVideo = async (req, res) => {
+    const {
+        params: {id}
+    } = req;
+
+    try {
+        const video = await Video.findById(id);
+        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video })
+    } catch(error) {
+        res.redirect(routes.home);
+        res.render("editVideo", { pageTitle: "Edit Video" });
+    }
+};
+
+export const postEditVideo = async (req, res) => {
+    const {
+        params: {id},
+        body: {title, description}
+    } = req;
+    try {
+        await Video.findOneAndUpdate({ _id: id }, {title, description});
+        req.redirect(routes.VIDEO_DETAIL(id));
+    } catch(error) {
+        console.log(error);
+        res.redirect(routes.HOME);
+    }
+};
+
+export const deleteVideo = async (req, res) => {
+    const {
+        params: {id}
+    } = req;
+    try {
+        await Video.deleteOne({_id: id});
+    } catch(error) {
+    }
+    res.redirect(routes.HOME);
+};
  
